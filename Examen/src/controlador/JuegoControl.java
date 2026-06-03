@@ -1,7 +1,7 @@
 package controlador;
 import modelo.Tablero;
 import vista.ConsolaVista;
-
+import excepciones.CasillaYaDescubiertaException;
 
 public class JuegoControl {
     private Tablero modelo;
@@ -12,34 +12,38 @@ public class JuegoControl {
 
     public void realizarAccion(String accion, String coord) {
         try {
-            // Validar que la coordenada tenga al menos 2 caracteres (letra + número)
-            if (coord.length() < 2) {
+            // 1. Validaciones básicas de formato
+            if (coord == null || coord.length() < 2) {
                 System.out.println("Error: Formato de coordenada inválido (ej: A5).");
                 return;
             }
 
-            // Convertir coordenada (ej: A5 -> fila 0, col 4)
+            // 2. Conversión de coordenada
             int fila = coord.toUpperCase().charAt(0) - 'A';
             int col = Integer.parseInt(coord.substring(1)) - 1;
 
-            // Validar límites del tablero
+            // 3. Validación de límites
             if (fila < 0 || fila >= 10 || col < 0 || col >= 10) {
                 System.out.println("Error: La coordenada está fuera del tablero (A-J, 1-10).");
                 return;
             }
 
-            // Ejecutar la acción
-            if (accion.equals("R")) {
+            // 4. Ejecución de lógica según la acción
+            if (accion.equalsIgnoreCase("R")) {
                 modelo.revelarCasilla(fila, col);
-            } else if (accion.equals("M")) {
+            } else if (accion.equalsIgnoreCase("M")) {
                 modelo.getCasilla(fila, col).setMarcada(!modelo.getCasilla(fila, col).estaMarcada());
             } else {
-                System.out.println("Error: Acción no reconocida.");
+                System.out.println("Error: Acción no reconocida. Usa R (Revelar) o M (Marcar).");
             }
 
+        } catch (CasillaYaDescubiertaException e) {
+            // Manejo de tu excepción personalizada
+            System.out.println("Aviso: " + e.getMessage());
         } catch (NumberFormatException e) {
-            System.out.println("Error: El número de columna no es válido.");
+            System.out.println("Error: La columna debe ser un número (ej: 1-10).");
         } catch (Exception e) {
+            // Manejo de cualquier error inesperado
             System.out.println("Error inesperado: " + e.getMessage());
         }
     }
