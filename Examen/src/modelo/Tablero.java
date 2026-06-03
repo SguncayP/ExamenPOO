@@ -1,8 +1,13 @@
 package modelo;
 import java.util.Random;
 
-public class Tablero {
-    private final int TAM = 10, MINAS = 10;
+import java.io.Serializable;
+import java.util.Random;
+
+public class Tablero implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private final int TAM = 10;
+    private final int MINAS = 10;
     private Casilla[][] celdas = new Casilla[TAM][TAM];
 
     public Tablero() {
@@ -23,20 +28,36 @@ public class Tablero {
     private void calcularAdyacencias() {
         for (int i = 0; i < TAM; i++) for (int j = 0; j < TAM; j++) if (!celdas[i][j].esMina()) {
             int c = 0;
-            for (int f = i-1; f <= i+1; f++) for (int col = j-1; col <= j+1; col++)
-                if (f>=0 && f<TAM && col>=0 && col<TAM && celdas[f][col].esMina()) c++;
+            for (int f = i - 1; f <= i + 1; f++) for (int col = j - 1; col <= j + 1; col++)
+                if (f >= 0 && f < TAM && col >= 0 && col < TAM && celdas[f][col].esMina()) c++;
             celdas[i][j].setMinasAdyacencias(c);
         }
     }
 
     public void revelarCasilla(int f, int c) {
         if (f < 0 || f >= TAM || c < 0 || c >= TAM || celdas[f][c].estaRevelada() || celdas[f][c].estaMarcada()) return;
+        
         celdas[f][c].setEstaRevelada(true);
-        if (celdas[f][c].getMinasAdyacencias() == 0)
-            for (int i = f-1; i <= f+1; i++) for (int j = c-1; j <= c+1; j++) revelarCasilla(i, j);
+        
+        // Revelado recursivo (Flood Fill)
+        if (celdas[f][c].getMinasAdyacencias() == 0) {
+            for (int i = f - 1; i <= f + 1; i++) 
+                for (int j = c - 1; j <= c + 1; j++) revelarCasilla(i, j);
+        }
     }
 
     public Casilla getCasilla(int f, int c) { return celdas[f][c]; }
-    public boolean esDerrota() { for(Casilla[] fila : celdas) for(Casilla c : fila) if(c.estaRevelada() && c.esMina()) return true; return false; }
-    public boolean esVictoria() { int rev = 0; for(Casilla[] fila : celdas) for(Casilla c : fila) if(!c.esMina() && c.estaRevelada()) rev++; return rev == (TAM*TAM - MINAS); }
+
+    public boolean esDerrota() {
+        for (int i = 0; i < TAM; i++) for (int j = 0; j < TAM; j++)
+            if (celdas[i][j].estaRevelada() && celdas[i][j].esMina()) return true;
+        return false;
+    }
+
+    public boolean esVictoria() {
+        int rev = 0;
+        for (int i = 0; i < TAM; i++) for (int j = 0; j < TAM; j++)
+            if (!celdas[i][j].esMina() && celdas[i][j].estaRevelada()) rev++;
+        return rev == (TAM * TAM - MINAS);
+    }
 }
