@@ -1,21 +1,32 @@
+
 package modelo;
-import java.util.Random;
 
 import java.io.Serializable;
 import java.util.Random;
 import excepciones.CasillaYaDescubiertaException;
 
+/**
+ * Esta es la clase principal del juego. Se encarga de gestionar toda la matriz
+ * de casillas, colocar las minas aleatoriamente y calcular los números de 
+ * proximidad. Es el "corazón" del modelo MVC.
+ */
 public class Tablero implements Serializable {
     private static final long serialVersionUID = 1L;
     private final int TAM = 10;
     private final int MINAS = 10;
     private final Casilla[][] celdas = new Casilla[TAM][TAM];
 
+    /**
+     * Constructor que prepara el juego: crea las celdas, 
+     * pone las minas y calcula los números de los vecinos.
+     */
     public Tablero() {
         inicializarTablero();
         colocarMinas();
         calcularAdyacencias();
     }
+
+    // --- Métodos de lógica interna ---
 
     private void inicializarTablero() {
         for (int i = 0; i < TAM; i++)
@@ -48,6 +59,11 @@ public class Tablero implements Serializable {
         return count;
     }
 
+    /**
+     * Revela una casilla. Si la casilla está vacía (0 minas), 
+     * activa el método recursivo para abrir todas las vacías alrededor.
+     * @throws CasillaYaDescubiertaException si el jugador intenta abrir algo ya abierto.
+     */
     public void revelarCasilla(int f, int c) throws CasillaYaDescubiertaException {
         if (!esPosicionValida(f, c) || celdas[f][c].estaMarcada()) return;
         
@@ -56,10 +72,14 @@ public class Tablero implements Serializable {
 
         celdas[f][c].setEstaRevelada(true);
         
+        // Si no hay minas cerca, abrimos las vecinas (recursividad)
         if (celdas[f][c].getMinasAdyacencias() == 0)
             revelarVecinos(f, c);
     }
 
+    /**
+     * Método recursivo que abre automáticamente las casillas vacías vecinas.
+     */
     private void revelarVecinos(int f, int c) {
         for (int i = f - 1; i <= f + 1; i++)
             for (int j = c - 1; j <= c + 1; j++)
@@ -67,7 +87,6 @@ public class Tablero implements Serializable {
     }
 
     public void marcarCasilla(int f, int c) {
-        // Validación estricta para TDD: solo marcar si es válida y NO está revelada
         if (esPosicionValida(f, c) && !celdas[f][c].estaRevelada()) {
             celdas[f][c].setMarcada(!celdas[f][c].estaMarcada());
         }

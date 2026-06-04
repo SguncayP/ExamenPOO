@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>410</x>
+      <y>30</y>
+      <w>290</w>
+      <h>330</h>
+    </coordinates>
+    <panel_attributes>modelo::Tablero
+--
+-serialVersionUID = 1L: long
+-TAM = 10: int
+-MINAS = 10: int
+-celdas = new Casilla[TAM][TAM]: Casilla[][]
+--
++Tablero(): ctor
+-inicializarTablero(): void
+-colocarMinas(): void
+-calcularAdyacencias(): void
+-contarMinasVecinas(int f, int c): int
++revelarCasilla(int f, int c): void
+-revelarVecinos(int f, int c): void
++marcarCasilla(int f, int c): void
+-esPosicionValida(int f, int c): boolean
++getCasilla(int f, int c): Casilla
++esDerrota(): boolean
++esVictoria(): boolean
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>50</x>
+      <y>450</y>
+      <w>280</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>modelo::Casilla
+--
+-serialVersionUID = 1L: long
+-esMina, estaRevelada, marcada: boolean
+-minasAdyacencias: int
+--
++Casilla(): ctor
++esMina(): boolean
++setEsMina(boolean esMina): void
++estaRevelada(): boolean
++setEstaRevelada(boolean r): void
++estaMarcada(): boolean
++setMarcada(boolean m): void
++getMinasAdyacencias(): int
++setMinasAdyacencias(int n): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>30</x>
+      <y>210</y>
+      <w>320</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>controlador::JuegoControl
+--
+-modelo: Tablero
+--
++JuegoControl(Tablero modelo): ctor
++realizarAccion(String accion, String coord): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>750</x>
+      <y>210</y>
+      <w>390</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>modelo::GestorArchivos
+--
+--
++guardarJuego(Tablero tablero, String nombreArchivo): void
++cargarJuego(String nombreArchivo): Tablero
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>850</x>
+      <y>520</y>
+      <w>360</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>excepciones::CasillaYaDescubiertaException
+--
+--
++CasillaYaDescubiertaException(String mensaje): ctor
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>450</x>
+      <y>500</y>
+      <w>180</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>principal::Main
+--
+--
++main(String[] args): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>340</y>
+      <w>220</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>vista::ConsolaVista
+--
+--
++mostrarTablero(Tablero t): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>110</y>
+      <w>250</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>230.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>310</y>
+      <w>250</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>230.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>470</x>
+      <y>350</y>
+      <w>60</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>40.0;10.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>620</x>
+      <y>360</y>
+      <w>200</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>180.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>300</x>
+      <y>310</y>
+      <w>170</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;150.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>690</x>
+      <y>110</y>
+      <w>300</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>280.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>550</x>
+      <y>350</y>
+      <w>320</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;300.0;170.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>220</x>
+      <y>310</y>
+      <w>650</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>630.0;260.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
